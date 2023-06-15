@@ -1,4 +1,4 @@
-package com.project.cafe.member.vo;
+package com.project.cafe.member.model.vo;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -6,7 +6,6 @@ import org.hibernate.annotations.DynamicInsert;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 //MySQL 테이블 삭제!
 //유효성 검사(null 어노테이션)

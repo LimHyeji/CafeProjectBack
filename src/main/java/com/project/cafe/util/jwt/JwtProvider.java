@@ -1,6 +1,6 @@
 package com.project.cafe.util.jwt;
 
-import com.project.cafe.member.vo.MemberVO;
+import com.project.cafe.member.model.vo.MemberVO;
 
 public class JwtProvider {
 

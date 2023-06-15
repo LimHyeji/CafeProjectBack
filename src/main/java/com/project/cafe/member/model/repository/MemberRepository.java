@@ -1,6 +1,6 @@
-package com.project.cafe.member.repository;
+package com.project.cafe.member.model.repository;
 
-import com.project.cafe.member.vo.MemberVO;
+import com.project.cafe.member.model.vo.MemberVO;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<MemberVO,String> {
