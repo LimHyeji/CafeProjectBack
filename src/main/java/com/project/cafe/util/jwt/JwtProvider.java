@@ -1,14 +1,10 @@
 package com.project.cafe.util.jwt;
 
-<<<<<<< HEAD
 import com.project.cafe.member.model.vo.MemberVO;
-=======
-import com.project.cafe.member.vo.MemberVO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.*;//build.gradle에 jsonwebtoken을 추가해주어야 함
 import java.util.Date;
->>>>>>> 0b627800e17c2d5348cd44f81c3b508a3f0cbc52
 
 @Component
 public class JwtProvider {
