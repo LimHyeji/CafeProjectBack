@@ -1,0 +1,18 @@
+package com.project.cafe.board.model.repository;
+
+import com.project.cafe.board.model.dto.response.BoardDetailInfoResponseDto;
+import com.project.cafe.board.model.dto.response.BoardSimpleInfoResponseDto;
+import com.project.cafe.board.model.vo.BoardVO;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface BoardRepository extends JpaRepository<BoardVO,String> {
+
+    List<BoardSimpleInfoResponseDto> getSimpleInfoBoardList() throws DataAccessException;
+
+    BoardDetailInfoResponseDto getBoardDetailInfo(int articleNo) throws DataAccessException;
+}

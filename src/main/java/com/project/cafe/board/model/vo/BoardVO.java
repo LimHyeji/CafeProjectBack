@@ -1,4 +1,4 @@
-package com.project.cafe.board.vo;
+package com.project.cafe.board.model.vo;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
