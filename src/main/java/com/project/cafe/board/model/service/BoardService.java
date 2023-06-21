@@ -4,6 +4,7 @@ import com.project.cafe.board.model.dto.response.BoardDetailInfoResponseDto;
 import com.project.cafe.board.model.dto.response.BoardSimpleInfoResponseDto;
 import com.project.cafe.board.model.repository.BoardRepository;
 import com.project.cafe.board.model.vo.BoardVO;
+import com.project.cafe.exception.list.NoDetailBoardException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -33,8 +34,8 @@ public class BoardService {
         return boardList;
     }
 
-    public BoardDetailInfoResponseDto getBoardDetailInfo(int articleNo) throws Exception{
-        BoardVO board = boardRepository.findById(articleNo).orElseThrow(()->new Exception("null"));
+    public BoardDetailInfoResponseDto getBoardDetailInfo(int articleNo) throws NoDetailBoardException{
+        BoardVO board = boardRepository.findById(articleNo).orElseThrow(()->new NoDetailBoardException());
         BoardDetailInfoResponseDto boardDetailOfArticleNo = new BoardDetailInfoResponseDto();
         boardDetailOfArticleNo.convertToDto(board);
 
