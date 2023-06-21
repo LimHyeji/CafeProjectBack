@@ -19,6 +19,7 @@ public class BoardController {
 
     private final BoardService boardService;
 
+
     @Autowired
     public BoardController(BoardService boardService) {
         this.boardService = boardService;
@@ -30,8 +31,9 @@ public class BoardController {
     }
 
     //articleNo는 PathVariable
-    @GetMapping("{articleno}")
-    public ResponseEntity<BoardDetailInfoResponseDto> getBoardDetailInfo(@PathVariable("articleNo") int articleNo) {
+    @GetMapping("{articleNo}")
+    public ResponseEntity<BoardDetailInfoResponseDto> getBoardDetailInfo(@PathVariable("articleNo") int articleNo) throws Exception{
+
         return ResponseEntity.ok().body(boardService.getBoardDetailInfo(articleNo));
     }
 

@@ -16,17 +16,17 @@ import java.util.Date;
 public class BoardVO {
 
     @Id
-    @Column(name = "articleNo", nullable = false)
+    @Column(name = "articleNo")
     private int articleNo;
-    @Column(name = "title", nullable = false, length = 100)
-    @ColumnDefault("제목없음")
+    @Column(name = "title",length = 100)
+    @ColumnDefault("'noTitle'")
     private String title;
 
-    @Column(name = "content", nullable = false, length = 2000)
-    @ColumnDefault("내용없음")
+    @Column(name = "content",length = 2000)
+    @ColumnDefault("'noContent'")
     private String content;
 
-    @Column(name = "writer", nullable = false, length = 20)
+    @Column(name = "writer",length = 20)
     private String writer;
 
     @Column(name = "hit",nullable = false)

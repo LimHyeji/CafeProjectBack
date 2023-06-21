@@ -10,9 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BoardRepository extends JpaRepository<BoardVO,String> {
+public interface BoardRepository extends JpaRepository<BoardVO,Integer> {
 
-    List<BoardSimpleInfoResponseDto> getSimpleInfoBoardList() throws DataAccessException;
 
-    BoardDetailInfoResponseDto getBoardDetailInfo(int articleNo) throws DataAccessException;
 }

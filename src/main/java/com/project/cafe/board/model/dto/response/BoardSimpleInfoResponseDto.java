@@ -1,5 +1,7 @@
 package com.project.cafe.board.model.dto.response;
 
+import com.project.cafe.board.model.vo.BoardVO;
+
 import java.sql.Timestamp;
 
 public class BoardSimpleInfoResponseDto {
@@ -10,7 +12,6 @@ public class BoardSimpleInfoResponseDto {
     private int hit; // 조회수
     private Timestamp regDate;
 
-
     public BoardSimpleInfoResponseDto() {
     }
 
@@ -20,6 +21,16 @@ public class BoardSimpleInfoResponseDto {
         setWriter(writer);
         setHit(hit);
         setRegDate(regDate);
+    }
+
+    public BoardSimpleInfoResponseDto convertToDto(BoardVO board) {
+        BoardSimpleInfoResponseDto dto = new BoardSimpleInfoResponseDto();
+        dto.setArticleNo(board.getArticleNo());
+        dto.setTitle(board.getTitle());
+        dto.setWriter(board.getWriter());
+        dto.setHit(board.getHit());
+        dto.setRegDate(board.getRegDate());
+        return dto;
     }
 
     public int getArticleNo() {
