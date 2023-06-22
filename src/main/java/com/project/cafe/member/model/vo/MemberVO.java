@@ -21,7 +21,8 @@ public class MemberVO {
     @Column(name="memberId", nullable = false, length = 20)
     private String memberId;
 
-    @Column(name="grade", nullable = false, length = 20)
+    @Column(name="grade", length = 20)
+    @ColumnDefault("'회원'")//null일 경우 '회원'으로 저장하며, '관리자'는 별도로 입력함
     private String grade;
 
     @Column(name="memberPwd", nullable = false, length = 500)
@@ -38,6 +39,13 @@ public class MemberVO {
     private int loginCnt;
 
     public MemberVO() {}
+
+    public MemberVO(String memberId, String memberPwd, String memberName, String memberEmail) {
+        setMemberId(memberId);
+        setMemberPwd(memberPwd);
+        setMemberName(memberName);
+        setMemberEmail(memberEmail);
+    }
 
     public MemberVO(String memberId, String grade, String memberPwd, String memberName, String memberEmail, int loginCnt) {
         setMemberId(memberId);
@@ -94,5 +102,17 @@ public class MemberVO {
 
     public void setLoginCnt(int loginCnt) {
         this.loginCnt = loginCnt;
+    }
+
+    @Override
+    public String toString() {
+        return "MemberVO{" +
+                "memberId='" + memberId + '\'' +
+                ", grade='" + grade + '\'' +
+                ", memberPwd='" + memberPwd + '\'' +
+                ", memberName='" + memberName + '\'' +
+                ", memberEmail='" + memberEmail + '\'' +
+                ", loginCnt=" + loginCnt +
+                '}';
     }
 }
