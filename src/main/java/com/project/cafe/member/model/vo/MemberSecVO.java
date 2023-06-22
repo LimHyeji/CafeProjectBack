@@ -38,4 +38,12 @@ public class MemberSecVO {
     public void setSalt(String salt) {
         this.salt = salt;
     }
+
+    @Override
+    public String toString() {
+        return "MemberSecVO{" +
+                "memberId='" + memberId + '\'' +
+                ", salt='" + salt + '\'' +
+                '}';
+    }
 }
