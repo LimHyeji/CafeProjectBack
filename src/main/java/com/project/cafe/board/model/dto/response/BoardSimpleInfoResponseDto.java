@@ -23,12 +23,14 @@ public class BoardSimpleInfoResponseDto {
         setRegDate(regDate);
     }
 
-    public void convertToDto(BoardVO board) {
-        setArticleNo(board.getArticleNo());
-        setTitle(board.getTitle());
-        setWriter(board.getWriter());
-        setHit(board.getHit());
-        setRegDate(board.getRegDate());
+    public BoardSimpleInfoResponseDto convertToDto(BoardVO board) {
+        BoardSimpleInfoResponseDto dto = new BoardSimpleInfoResponseDto();
+        dto.setArticleNo(board.getArticleNo());
+        dto.setTitle(board.getTitle());
+        dto.setWriter(board.getWriter());
+        dto.setHit(board.getHit());
+        dto.setRegDate(board.getRegDate());
+        return dto;
     }
 
     public int getArticleNo() {
@@ -56,7 +58,7 @@ public class BoardSimpleInfoResponseDto {
     }
 
     public void setTitle(String title) {
-        if(title == null || title.trim().length() == 0) return; // throw error, 제목을 입력해주세요.
+        if(title == null || title.trim().length() == 0) return;
         this.title = title;
     }
 
@@ -71,5 +73,16 @@ public class BoardSimpleInfoResponseDto {
 
     public void setRegDate(Timestamp regDate) {
         this.regDate = regDate;
+    }
+
+    @Override
+    public String toString() {
+        return "BoardSimpleInfoResponseDto{" +
+                "articleNo=" + articleNo +
+                ", title='" + title + '\'' +
+                ", writer='" + writer + '\'' +
+                ", hit=" + hit +
+                ", regDate=" + regDate +
+                '}';
     }
 }

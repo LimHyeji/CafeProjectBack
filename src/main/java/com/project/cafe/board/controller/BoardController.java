@@ -51,6 +51,14 @@ public class BoardController {
         return ResponseEntity.ok().body("ok");
     }
 
+    @GetMapping("delete/{articleNo}")
+    public ResponseEntity<String> deleteBoard(@PathVariable int articleNo) {
+        boardService.deleteBoard(articleNo);
+
+        return ResponseEntity.ok().body("ok");
+
+    }
+
 
 
 
