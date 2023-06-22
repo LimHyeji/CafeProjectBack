@@ -1,5 +1,7 @@
 package com.project.cafe.board.model.service;
 
+import com.project.cafe.board.model.dto.request.BoardCreateRequestDto;
+import com.project.cafe.board.model.dto.request.BoardUpdateRequestDto;
 import com.project.cafe.board.model.dto.response.BoardDetailInfoResponseDto;
 import com.project.cafe.board.model.dto.response.BoardSimpleInfoResponseDto;
 import com.project.cafe.board.model.repository.BoardRepository;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,5 +43,23 @@ public class BoardService {
         boardDetailOfArticleNo.convertToDto(board);
 
         return boardDetailOfArticleNo;
+    }
+
+    public void createBoard(BoardCreateRequestDto boardCreateRequestDto) {
+        BoardVO board = new BoardVO();
+        board.setContent(boardCreateRequestDto.getContent());
+        board.setWriter(boardCreateRequestDto.getWriter());
+        board.setTitle(boardCreateRequestDto.getTitle());
+
+        boardRepository.save(board);
+    }
+
+    public void updateBoard(BoardUpdateRequestDto boardUpdateRequestDto) throws NoDetailBoardException{
+        BoardVO board = boardRepository.findById(boardUpdateRequestDto.getArticleNo()).orElseThrow(() -> new NoDetailBoardException());
+
+        board.setTitle(boardUpdateRequestDto.getTitle());
+        board.setContent(boardUpdateRequestDto.getContent());
+
+        boardRepository.save(board);
     }
 }

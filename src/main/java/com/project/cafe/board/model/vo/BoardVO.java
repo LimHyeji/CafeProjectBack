@@ -4,9 +4,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.xml.crypto.Data;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -17,6 +15,7 @@ public class BoardVO {
 
     @Id
     @Column(name = "articleNo")
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 정상 작동되는지 확인해야 한다.
     private int articleNo;
     @Column(name = "title",length = 100)
     @ColumnDefault("'noTitle'")
