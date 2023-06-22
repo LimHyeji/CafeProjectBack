@@ -23,14 +23,12 @@ public class BoardSimpleInfoResponseDto {
         setRegDate(regDate);
     }
 
-    public BoardSimpleInfoResponseDto convertToDto(BoardVO board) {
-        BoardSimpleInfoResponseDto dto = new BoardSimpleInfoResponseDto();
-        dto.setArticleNo(board.getArticleNo());
-        dto.setTitle(board.getTitle());
-        dto.setWriter(board.getWriter());
-        dto.setHit(board.getHit());
-        dto.setRegDate(board.getRegDate());
-        return dto;
+    public void convertToDto(BoardVO board) {
+        setArticleNo(board.getArticleNo());
+        setTitle(board.getTitle());
+        setWriter(board.getWriter());
+        setHit(board.getHit());
+        setRegDate(board.getRegDate());
     }
 
     public int getArticleNo() {

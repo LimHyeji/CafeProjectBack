@@ -32,7 +32,8 @@ public class BoardService {
         int listSize = all.size();
         List<BoardSimpleInfoResponseDto> boardList = new ArrayList<>();
         for (int i=0; i<listSize; i++) {
-            boardList.add(dto.convertToDto(all.get(i)));
+            dto.convertToDto(all.get(i));
+            boardList.add(dto);
         }
         return boardList;
     }
