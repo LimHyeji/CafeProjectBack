@@ -1,6 +1,8 @@
 package com.project.cafe.member.model.service;
 
+import com.project.cafe.exception.list.NoLoginMemberException;
 import com.project.cafe.exception.list.NoRegistMemberException;
+import com.project.cafe.member.model.dto.request.MemberLoginRequestDto;
 import com.project.cafe.member.model.dto.request.MemberRegistRequestDto;
 import com.project.cafe.member.model.repository.MemberRepository;
 import com.project.cafe.member.model.repository.MemberSecRepository;
@@ -8,6 +10,7 @@ import com.project.cafe.member.model.vo.MemberSecVO;
 import com.project.cafe.member.model.vo.MemberVO;
 import com.project.cafe.util.encrypt.OpenCrypt;
 import com.project.cafe.util.jwt.JwtProvider;
+import com.project.cafe.util.jwt.TokenDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -63,5 +66,38 @@ public class MemberService {
         catch(Exception e){
             throw new NoRegistMemberException("회원가입에 실패했습니다.");
         }
+    }
+
+    public TokenDto loginMember(MemberLoginRequestDto dto) throws NoLoginMemberException{
+        Optional<MemberVO> member=memberRepository.findById(dto.getMemberId());
+        Optional<MemberSecVO> memberSec=memberSecRepository.findById(dto.getMemberId());
+        if(member.isEmpty()){
+            throw new NoLoginMemberException("존재하지 않는 회원입니다.");
+        }
+        if(memberSec.isEmpty()){
+            throw new NoLoginMemberException("관리자에게 문의하세요.");
+        }
+
+        try{
+            String salt = memberSec.get().getSalt();
+            //System.out.println("memberSec salt"+salt);
+            String hashPwd = OpenCrypt.getSHA256(dto.getMemberPwd(), salt);
+            //System.out.println("hashPwd "+hashPwd);
+
+            if(member.get().getMemberPwd().equals(hashPwd)){
+                //System.out.println("일치하는 상황");
+                //System.out.println(member.get().toString());
+                String accessToken=jwtProvider.createToken(member.get());
+                //System.out.println("jwt"+accessToken);
+                return new TokenDto(accessToken);
+            }
+            else{
+                throw new NoLoginMemberException("비밀번호가 일치하지 않습니다.");
+            }
+        }
+        catch(Exception e){
+            throw new NoLoginMemberException("로그인에 실패했습니다.");
+        }
+
     }
 }

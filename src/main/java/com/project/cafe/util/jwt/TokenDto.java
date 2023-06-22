@@ -1,10 +1,10 @@
 package com.project.cafe.util.jwt;
 
-public class TokenDTO {
+public class TokenDto {
 
     private String accessToken;
 
-    public TokenDTO(String accessToken) {
+    public TokenDto(String accessToken) {
         this.accessToken = accessToken;
     }
 

@@ -1,8 +1,10 @@
 package com.project.cafe.member.controller;
 
+import com.project.cafe.member.model.dto.request.MemberLoginRequestDto;
 import com.project.cafe.member.model.dto.request.MemberRegistRequestDto;
 import com.project.cafe.member.model.service.MemberService;
 import com.project.cafe.util.jwt.JwtProvider;
+import com.project.cafe.util.jwt.TokenDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +32,12 @@ public class MemberController {
         return ResponseEntity.ok().body("회원가입 성공");
     }
 
-//    //post, member -> 토큰
-//    @PostMapping(value="/login")
-//    public void loginMember(){
-//
-//    }
-//
+    //post, member -> 토큰
+    @PostMapping(value="/login")
+    public ResponseEntity<TokenDto> loginMember(@RequestBody MemberLoginRequestDto dto){
+        return ResponseEntity.ok().body(memberService.loginMember(dto));
+    }
+
 //    //get ${memberId}, -> memberInfo
 //    @GetMapping
 //    public void getMemberInfo(){
