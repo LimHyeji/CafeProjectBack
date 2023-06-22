@@ -10,13 +10,16 @@ import java.util.Date;
 public class JwtProvider {
 
     //각각 application.properties에 선언된 값 가져오기
-    @Value("${jwt.secretKey")
+    @Value("${jwt.secretKey}")
     private String secretKey;
     @Value("${jwt.expired}")
     private long expired;
 
     //토큰 생성하는 메소드
     public String createToken(MemberVO memberVO) throws Exception{
+        //System.out.println("createToken ..."+memberVO.toString());
+        //System.out.println(secretKey);
+        //System.out.println(expired);
         return Jwts.builder()
                 .setHeaderParam("typ","JWT")//헤더에 타입을 JWT로 지정하고
                 .setSubject("memberToken")//이름은 memberToken이고
