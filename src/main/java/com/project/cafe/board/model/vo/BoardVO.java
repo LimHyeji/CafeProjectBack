@@ -17,6 +17,7 @@ public class BoardVO {
     @Column(name = "articleNo")
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 정상 작동되는지 확인해야 한다.
     private int articleNo;
+
     @Column(name = "title",length = 100)
     @ColumnDefault("'noTitle'")
     private String title;
@@ -98,5 +99,17 @@ public class BoardVO {
 
     public void setRegDate(Timestamp regDate) {
         this.regDate = regDate;
+    }
+
+    @Override
+    public String toString() {
+        return "BoardVO{" +
+                "articleNo=" + articleNo +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", writer='" + writer + '\'' +
+                ", hit=" + hit +
+                ", regDate=" + regDate +
+                '}';
     }
 }

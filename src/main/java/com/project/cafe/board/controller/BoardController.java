@@ -32,7 +32,6 @@ public class BoardController {
     //articleNo는 PathVariable
     @GetMapping("{articleNo}")
     public ResponseEntity<BoardDetailInfoResponseDto> getBoardDetailInfo(@PathVariable("articleNo") int articleNo) throws Exception{
-
         return ResponseEntity.ok().body(boardService.getBoardDetailInfo(articleNo));
     }
 

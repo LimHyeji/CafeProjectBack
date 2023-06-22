@@ -28,17 +28,13 @@ public class BoardDetailInfoResponseDto {
         setRegDate(regDate);
     }
 
-    public BoardDetailInfoResponseDto convertToDto(BoardVO board) {
-
-        BoardDetailInfoResponseDto dto = new BoardDetailInfoResponseDto();
-        dto.setArticleNo(board.getArticleNo());
-        dto.setTitle(board.getTitle());
-        dto.setContent(board.getContent());
-        dto.setWriter(board.getWriter());
-        dto.setHit(board.getHit());
-        dto.setRegDate(board.getRegDate());
-
-        return dto;
+    public void convertToDto(BoardVO board) {
+        setArticleNo(board.getArticleNo());
+        setTitle(board.getTitle());
+        setContent(board.getContent());
+        setWriter(board.getWriter());
+        setHit(board.getHit());
+        setRegDate(board.getRegDate());
     }
 
     public int getArticleNo() {
@@ -90,5 +86,17 @@ public class BoardDetailInfoResponseDto {
 
     public void setRegDate(Timestamp regDate) {
         this.regDate = regDate;
+    }
+
+    @Override
+    public String toString() {
+        return "BoardDetailInfoResponseDto{" +
+                "articleNo=" + articleNo +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", writer='" + writer + '\'' +
+                ", hit=" + hit +
+                ", regDate=" + regDate +
+                '}';
     }
 }
