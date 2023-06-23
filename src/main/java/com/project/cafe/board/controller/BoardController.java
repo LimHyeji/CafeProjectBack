@@ -36,24 +36,26 @@ public class BoardController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createBoard(@RequestBody BoardCreateRequestDto boardCreateRequestDto ) {
-
-        boardService.createBoard(boardCreateRequestDto);
-
+    public ResponseEntity<String> createBoard(@RequestHeader("Authorization") String authorization,
+                                                  @RequestBody BoardCreateRequestDto boardCreateRequestDto ) {
+        String memberToken = authorization.split(" ")[1];
+        boardService.createBoard(memberToken,boardCreateRequestDto);
         return ResponseEntity.ok().body("ok");
     }
 
     @PostMapping("/update")
-    public ResponseEntity<String> updateBoard(@RequestBody BoardUpdateRequestDto boardUpdateRequestDto) {
-
-        boardService.updateBoard(boardUpdateRequestDto);
-
+    public ResponseEntity<String> updateBoard(@RequestHeader("Authorization") String authorization,
+                                              @RequestBody BoardUpdateRequestDto boardUpdateRequestDto) {
+        String memberToken = authorization.split(" ")[1];
+        boardService.updateBoard(memberToken,boardUpdateRequestDto);
         return ResponseEntity.ok().body("ok");
     }
 
     @GetMapping("delete/{articleNo}")
-    public ResponseEntity<String> deleteBoard(@PathVariable int articleNo) {
-        boardService.deleteBoard(articleNo);
+    public ResponseEntity<String> deleteBoard(@RequestHeader("Authorization") String authorization,
+                                              @PathVariable int articleNo) {
+        String memberToken = authorization.split(" ")[1];
+        boardService.deleteBoard(memberToken,articleNo);
 
         return ResponseEntity.ok().body("ok");
 
