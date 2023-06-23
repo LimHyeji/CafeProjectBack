@@ -3,14 +3,14 @@ package com.project.cafe.board.model.dto.request;
 
 import com.project.cafe.exception.list.MaliciousAccessExcption;
 import com.project.cafe.exception.list.InvalidBoardException;
-
+import com.sun.istack.NotNull;
 public class BoardCreateRequestDto {
-
     private String writer;
     private String title;
     private String content;
 
     public BoardCreateRequestDto() {
+
     }
 
     public BoardCreateRequestDto(String writer, String title, String content) {
@@ -42,6 +42,7 @@ public class BoardCreateRequestDto {
     }
 
     public void setContent(String content) {
+        System.out.println(content);
         if(content == null || content.trim().length() == 0) throw new InvalidBoardException("내용을 입력해주세요.");
         this.content = content;
     }

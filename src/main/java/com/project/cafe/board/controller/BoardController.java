@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/board")
@@ -37,7 +38,8 @@ public class BoardController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createBoard( @RequestHeader("Authorization") String authorization,
-                                                  @RequestBody BoardCreateRequestDto boardCreateRequestDto ) {
+                                                 @RequestBody BoardCreateRequestDto boardCreateRequestDto ) {
+        System.out.println(boardCreateRequestDto.toString());
         String memberToken = authorization.split(" ")[1];
         boardService.createBoard(memberToken,boardCreateRequestDto);
         return ResponseEntity.ok().body("ok");
