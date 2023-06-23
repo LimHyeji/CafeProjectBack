@@ -58,7 +58,7 @@ public class BoardSimpleInfoResponseDto {
     }
 
     public void setTitle(String title) {
-        if(title == null || title.trim().length() == 0) return; // throw error, 제목을 입력해주세요.
+        if(title == null || title.trim().length() == 0) return;
         this.title = title;
     }
 
@@ -73,5 +73,16 @@ public class BoardSimpleInfoResponseDto {
 
     public void setRegDate(Timestamp regDate) {
         this.regDate = regDate;
+    }
+
+    @Override
+    public String toString() {
+        return "BoardSimpleInfoResponseDto{" +
+                "articleNo=" + articleNo +
+                ", title='" + title + '\'' +
+                ", writer='" + writer + '\'' +
+                ", hit=" + hit +
+                ", regDate=" + regDate +
+                '}';
     }
 }

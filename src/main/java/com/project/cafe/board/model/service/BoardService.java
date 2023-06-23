@@ -29,11 +29,12 @@ public class BoardService {
         List<BoardVO> all = boardRepository.findAll();
 
         BoardSimpleInfoResponseDto dto = new BoardSimpleInfoResponseDto();
-        int listSize = all.size();
         List<BoardSimpleInfoResponseDto> boardList = new ArrayList<>();
+        int listSize = all.size();
         for (int i=0; i<listSize; i++) {
             boardList.add(dto.convertToDto(all.get(i)));
         }
+
         return boardList;
     }
 
@@ -54,12 +55,18 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    public void updateBoard(BoardUpdateRequestDto boardUpdateRequestDto) throws NoDetailBoardException{
+    public void updateBoard(BoardUpdateRequestDto boardUpdateRequestDto) {
         BoardVO board = boardRepository.findById(boardUpdateRequestDto.getArticleNo()).orElseThrow(() -> new NoDetailBoardException());
 
         board.setTitle(boardUpdateRequestDto.getTitle());
         board.setContent(boardUpdateRequestDto.getContent());
 
         boardRepository.save(board);
+    }
+
+    public void deleteBoard(int articleNo) {
+        BoardVO board = boardRepository.findById(articleNo).orElseThrow(() -> new NoDetailBoardException());
+
+        boardRepository.deleteById(articleNo);
     }
 }
