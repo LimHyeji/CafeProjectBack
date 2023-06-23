@@ -1,7 +1,7 @@
 package com.project.cafe.board.model.dto.request;
 
 import com.project.cafe.exception.list.MaliciousAccessExcption;
-import com.project.cafe.exception.list.NoCreateBoardException;
+import com.project.cafe.exception.list.InvalidBoardException;
 
 public class BoardUpdateRequestDto {
 
@@ -36,12 +36,12 @@ public class BoardUpdateRequestDto {
     }
 
     public void setTitle(String title) {
-        if(title == null || title.trim().length() == 0) throw new NoCreateBoardException("제목을 입력해주세요.");
+        if(title == null || title.trim().length() == 0) throw new InvalidBoardException("제목을 입력해주세요.");
         this.title = title;
     }
 
     public void setContent(String content) {
-        if(content == null || content.trim().length() == 0) throw new NoCreateBoardException("내용을 입력해주세요.");
+        if(content == null || content.trim().length() == 0) throw new InvalidBoardException("내용을 입력해주세요.");
         this.content = content;
     }
 

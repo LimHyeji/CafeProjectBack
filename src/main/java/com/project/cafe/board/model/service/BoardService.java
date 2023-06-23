@@ -6,23 +6,33 @@ import com.project.cafe.board.model.dto.response.BoardDetailInfoResponseDto;
 import com.project.cafe.board.model.dto.response.BoardSimpleInfoResponseDto;
 import com.project.cafe.board.model.repository.BoardRepository;
 import com.project.cafe.board.model.vo.BoardVO;
+import com.project.cafe.exception.list.AuthorizationException;
+import com.project.cafe.exception.list.InvalidBoardException;
+import com.project.cafe.exception.list.MaliciousAccessExcption;
 import com.project.cafe.exception.list.NoDetailBoardException;
+import com.project.cafe.member.model.repository.MemberRepository;
+import com.project.cafe.member.model.vo.MemberVO;
+import com.project.cafe.util.jwt.JWTException;
+import com.project.cafe.util.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class BoardService {
 
+    private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
+    private final JwtProvider jwtProvider;
 
     @Autowired
-    public BoardService(BoardRepository boardRepository) {
+    public BoardService(MemberRepository memberRepository, BoardRepository boardRepository, JwtProvider jwtProvider) {
+        this.memberRepository = memberRepository;
         this.boardRepository = boardRepository;
+        this.jwtProvider = jwtProvider;
     }
 
     public List<BoardSimpleInfoResponseDto> getSimpleInfoBoardList() {
@@ -46,27 +56,54 @@ public class BoardService {
         return boardDetailOfArticleNo;
     }
 
-    public void createBoard(BoardCreateRequestDto boardCreateRequestDto) {
-        BoardVO board = new BoardVO();
-        board.setContent(boardCreateRequestDto.getContent());
-        board.setWriter(boardCreateRequestDto.getWriter());
-        board.setTitle(boardCreateRequestDto.getTitle());
+    @Transactional
+    public void createBoard(String memberToken, BoardCreateRequestDto boardCreateRequestDto) {
 
-        boardRepository.save(board);
+        try {
+            MemberVO tokenInfo = jwtProvider.parseInfo(memberToken);
+            MemberVO member = memberRepository.findById(tokenInfo.getMemberId()).orElseThrow(() -> new MaliciousAccessExcption());
+
+            BoardVO board = new BoardVO();
+            board.setContent(boardCreateRequestDto.getContent());
+            board.setWriter(boardCreateRequestDto.getWriter());
+            board.setTitle(boardCreateRequestDto.getTitle());
+
+            boardRepository.save(board);
+        } catch (JWTException e){
+            throw new InvalidBoardException("다시 로그인해주세요.");
+        }
     }
 
-    public void updateBoard(BoardUpdateRequestDto boardUpdateRequestDto) {
-        BoardVO board = boardRepository.findById(boardUpdateRequestDto.getArticleNo()).orElseThrow(() -> new NoDetailBoardException());
+    public void updateBoard(String memberToken, BoardUpdateRequestDto boardUpdateRequestDto) {
+        try {
+            MemberVO tokenInfo = jwtProvider.parseInfo(memberToken);
+            MemberVO member = memberRepository.findById(tokenInfo.getMemberId()).orElseThrow(() -> new MaliciousAccessExcption());
 
-        board.setTitle(boardUpdateRequestDto.getTitle());
-        board.setContent(boardUpdateRequestDto.getContent());
+            BoardVO board = boardRepository.findById(boardUpdateRequestDto.getArticleNo()).orElseThrow(() -> new NoDetailBoardException());
 
-        boardRepository.save(board);
+            if (!board.getWriter().equals(member.getMemberId())) throw new AuthorizationException();
+
+            board.setTitle(boardUpdateRequestDto.getTitle());
+            board.setContent(boardUpdateRequestDto.getContent());
+
+            boardRepository.save(board);
+        } catch (JWTException e){
+            throw new InvalidBoardException("다시 로그인해주세요.");
+        }
     }
 
-    public void deleteBoard(int articleNo) {
-        BoardVO board = boardRepository.findById(articleNo).orElseThrow(() -> new NoDetailBoardException());
+    public void deleteBoard(String memberToken, int articleNo) {
+        try {
+            MemberVO tokenInfo = jwtProvider.parseInfo(memberToken);
+            MemberVO member = memberRepository.findById(tokenInfo.getMemberId()).orElseThrow(() -> new MaliciousAccessExcption());
 
-        boardRepository.deleteById(articleNo);
+            BoardVO board = boardRepository.findById(articleNo).orElseThrow(() -> new NoDetailBoardException());
+
+            if (!board.getWriter().equals(member.getMemberId())) throw new AuthorizationException();
+
+            boardRepository.deleteById(articleNo);
+        } catch(JWTException e) {
+            throw new InvalidBoardException("다시 로그인해주세요.");
+        }
     }
 }
