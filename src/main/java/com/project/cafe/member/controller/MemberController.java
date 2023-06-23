@@ -51,7 +51,7 @@ public class MemberController {
     @PostMapping(value="/modify")
     public ResponseEntity<MemberInfoResponseDto> modifyMemberInfo(HttpServletRequest request,
                                                                   @RequestBody MemberModifyRequestDto dto) throws NoMemberModifyException, MaliciousAccessExcption{
-        String token=request.getHeader("Authrization").split(" ")[1];
+        String token=request.getHeader("Authorization").split(" ")[1];
         return ResponseEntity.ok().body(memberService.modifyMemberInfo(token,dto));
     }
 }

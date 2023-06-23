@@ -63,6 +63,10 @@ public class BoardService {
             MemberVO tokenInfo = jwtProvider.parseInfo(memberToken);
             MemberVO member = memberRepository.findById(tokenInfo.getMemberId()).orElseThrow(() -> new MaliciousAccessExcption());
 
+            if(!tokenInfo.getMemberId().equals(boardCreateRequestDto.getWriter())){
+             throw new AuthorizationException();
+            }
+
             BoardVO board = new BoardVO();
             board.setContent(boardCreateRequestDto.getContent());
             board.setWriter(boardCreateRequestDto.getWriter());
