@@ -1,9 +1,8 @@
 package com.project.cafe.member.model.service;
 
-import com.project.cafe.exception.list.NoInfoMemberException;
-import com.project.cafe.exception.list.NoLoginMemberException;
-import com.project.cafe.exception.list.NoRegistMemberException;
+import com.project.cafe.exception.list.*;
 import com.project.cafe.member.model.dto.request.MemberLoginRequestDto;
+import com.project.cafe.member.model.dto.request.MemberModifyRequestDto;
 import com.project.cafe.member.model.dto.request.MemberRegistRequestDto;
 import com.project.cafe.member.model.dto.response.MemberInfoResponseDto;
 import com.project.cafe.member.model.repository.MemberRepository;
@@ -44,10 +43,10 @@ public class MemberService {
 
     //아이디 중복 상황을 고려해 serializable로 트랜잭션 처리
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void registMember(MemberRegistRequestDto dto) throws NoRegistMemberException{
-        Optional<MemberVO> existMember=memberRepository.findById(dto.getMemberId());
+    public void registMember(MemberRegistRequestDto dto) throws NoMemberRegistException {
+        Optional<MemberVO> existMember=memberRepository.findById(dto.getMemberId());//단순히 회원이 존재하는 조회하기 위함이므로 Optional 사용
         if(existMember.isPresent()){
-            throw new NoRegistMemberException("이미 존재하는 회원입니다.");
+            throw new NoMemberRegistException("이미 존재하는 회원입니다.");
         }
 
         try {
@@ -61,52 +60,74 @@ public class MemberService {
             memberSecRepository.save(secVO);
         }
         catch(Exception e){
-            throw new NoRegistMemberException("회원가입에 실패했습니다.");
+            throw new NoMemberRegistException("회원가입에 실패했습니다.");
         }
     }
 
-    public TokenDto loginMember(MemberLoginRequestDto dto) throws NoLoginMemberException{
-        Optional<MemberVO> member=memberRepository.findById(dto.getMemberId());
-        Optional<MemberSecVO> memberSec=memberSecRepository.findById(dto.getMemberId());
-        if(member.isEmpty()){
-            throw new NoLoginMemberException("존재하지 않는 회원입니다.");
-        }
-        if(memberSec.isEmpty()){
-            throw new NoLoginMemberException("관리자에게 문의하세요.");
-        }
+    public TokenDto loginMember(MemberLoginRequestDto dto) throws NoMemberLoginException {
+        MemberVO member=memberRepository.findById(dto.getMemberId()).orElseThrow(()->new NoMemberLoginException("아이디를 확인하세요."));
+        MemberSecVO memberSec=memberSecRepository.findById(dto.getMemberId()).orElseThrow(()->new NoMemberLoginException("관리자에게 문의하세요."));//member테이블에 존재하지만 memberSec테이블에서는 부득이하게 삭제된 경우 로그인이 되지 않는 상황 발생
 
         try{
-            String salt = memberSec.get().getSalt();
+            String salt = memberSec.getSalt();
             String hashPwd = OpenCrypt.getSHA256(dto.getMemberPwd(), salt);
 
-            if(member.get().getMemberPwd().equals(hashPwd)){
-                String accessToken=jwtProvider.createToken(member.get());
+            if(member.getMemberPwd().equals(hashPwd)){
+                String accessToken=jwtProvider.createToken(member);
                 return new TokenDto(accessToken);
             }
             else{
-                throw new NoLoginMemberException("비밀번호가 일치하지 않습니다.");
+                throw new NoMemberLoginException("비밀번호를 확인하세요.");
             }
         }
         catch(Exception e){
-            throw new NoLoginMemberException("로그인에 실패했습니다.");
+            throw new NoMemberLoginException("로그인에 실패했습니다.");
         }
 
     }
 
-    public MemberInfoResponseDto getMemberInfo(String token) throws NoInfoMemberException{
+    public MemberInfoResponseDto getMemberInfo(String token) throws NoMemberInfoException, MaliciousAccessExcption {
         try{
             MemberVO parsedMember=jwtProvider.parseInfo(token);
+            MemberVO memberVO=memberRepository.findById(parsedMember.getMemberId()).orElseThrow(()->new MaliciousAccessExcption());//토큰 변조가 발생한 상황으로 유추
 
-            Optional<MemberVO> memberVO=memberRepository.findById(parsedMember.getMemberId());
-            if(memberVO.isEmpty()){
-                throw new NoInfoMemberException("존재하지 않는 회원입니다.");
-            }
-
-            return new MemberInfoResponseDto(memberVO.get().getMemberId(),
-                    memberVO.get().getMemberName(),
-                    memberVO.get().getMemberEmail());
+            return new MemberInfoResponseDto(memberVO.getMemberId(), memberVO.getMemberName(), memberVO.getMemberEmail());
         }catch(JWTException e){
-            throw new NoInfoMemberException("회원조회에 실패했습니다.");
+            throw new NoMemberInfoException("회원정보조회에 실패했습니다.");
+        }
+    }
+
+    //동시에 수정되는 상황을 고려한 트랜잭션 처리
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public MemberInfoResponseDto modifyMemberInfo(String token, MemberModifyRequestDto dto) throws NoMemberModifyException, MaliciousAccessExcption {
+        try{
+            //토큰에 저장된 memberId 확인
+            String memberId=jwtProvider.parseInfo(token).getMemberId();
+            MemberVO member=memberRepository.findById(memberId).orElseThrow(()->new MaliciousAccessExcption());
+            MemberSecVO memberSec=memberSecRepository.findById(memberId).orElseThrow(()->new NoMemberModifyException("관리자에게 문의하세요."));
+
+            //현재 비밀번호 확인
+            String salt = memberSec.getSalt();
+            String hashPwd = OpenCrypt.getSHA256(dto.getCurrentPwd(), salt);
+
+            //현재 비밀번호가 올바르게 입력된 경우
+            if(hashPwd.equals(member.getMemberPwd())){
+                //새로운 데이터 저장
+                String newHashPwd= OpenCrypt.getSHA256(dto.getNewPwd(), salt);
+
+                member.setMemberPwd(newHashPwd);
+                member.setMemberName(dto.getMemberName());
+                member.setMemberEmail(dto.getMemberEmail());
+
+                memberRepository.save(member);
+
+                return new MemberInfoResponseDto(member.getMemberId(),member.getMemberName(),member.getMemberEmail());
+            }
+            else{
+                throw new NoMemberModifyException("비밀번호를 확인하세요.");
+            }
+        }catch(Exception e){//JWTException, NoSuchAlgorithmException
+            throw new NoMemberModifyException("회원정보수정에 실패했습니다.");
         }
     }
 }

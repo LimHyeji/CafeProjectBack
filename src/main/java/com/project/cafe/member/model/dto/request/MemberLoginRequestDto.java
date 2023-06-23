@@ -1,6 +1,6 @@
 package com.project.cafe.member.model.dto.request;
 
-import com.project.cafe.exception.list.NoLoginMemberException;
+import com.project.cafe.exception.list.NoMemberLoginException;
 
 public class MemberLoginRequestDto {
 
@@ -9,7 +9,7 @@ public class MemberLoginRequestDto {
 
     public MemberLoginRequestDto() {  }
 
-    public MemberLoginRequestDto(String memberId, String memberPwd) throws NoLoginMemberException {
+    public MemberLoginRequestDto(String memberId, String memberPwd) throws NoMemberLoginException {
         setMemberId(memberId);
         setMemberPwd(memberPwd);
     }
@@ -24,16 +24,16 @@ public class MemberLoginRequestDto {
         return memberId;
     }
 
-    public void setMemberId(String memberId) throws NoLoginMemberException {
+    public void setMemberId(String memberId) throws NoMemberLoginException {
         if(!(memberId==null||memberId.trim().equals(""))){
             this.memberId=memberId;
         }
         else{
-            throw new NoLoginMemberException("아이디가 공백이어서는 안됩니다.");
+            throw new NoMemberLoginException("아이디가 공백이어서는 안됩니다.");
         }
     }
 
-    public String getMemberPwd() throws NoLoginMemberException{
+    public String getMemberPwd() throws NoMemberLoginException {
         return memberPwd;
     }
 
@@ -42,7 +42,7 @@ public class MemberLoginRequestDto {
             this.memberPwd=memberPwd;
         }
         else{
-            throw new NoLoginMemberException("비밀번호가 공백이어서는 안됩니다.");
+            throw new NoMemberLoginException("비밀번호가 공백이어서는 안됩니다.");
         }
     }
 }
