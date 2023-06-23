@@ -1,6 +1,6 @@
 package com.project.cafe.member.model.dto.request;
 
-import com.project.cafe.exception.list.NoRegistMemberException;
+import com.project.cafe.exception.list.NoMemberRegistException;
 
 import java.util.regex.Pattern;
 
@@ -13,7 +13,7 @@ public class MemberRegistRequestDto {
 
     public MemberRegistRequestDto() { }
 
-    public MemberRegistRequestDto(String memberId, String memberPwd, String memberName, String memberEmail) throws NoRegistMemberException {
+    public MemberRegistRequestDto(String memberId, String memberPwd, String memberName, String memberEmail) throws NoMemberRegistException {
         setMemberId(memberId);
         setMemberPwd(memberPwd);
         setMemberName(memberName);
@@ -33,13 +33,13 @@ public class MemberRegistRequestDto {
         return memberId;
     }
 
-    public void setMemberId(String memberId) throws NoRegistMemberException{
+    public void setMemberId(String memberId) throws NoMemberRegistException {
         //5자리 이상인지 확인
         if(!(memberId==null||memberId.trim().equals(""))&&memberId.length()>=5){
             this.memberId=memberId;
         }
         else{
-            throw new NoRegistMemberException("아이디 조건에 맞지 않습니다.");
+            throw new NoMemberRegistException("아이디 조건에 맞지 않습니다.");
         }
     }
 
@@ -47,7 +47,7 @@ public class MemberRegistRequestDto {
         return memberPwd;
     }
 
-    public void setMemberPwd(String memberPwd) throws NoRegistMemberException{
+    public void setMemberPwd(String memberPwd) throws NoMemberRegistException {
         //아이디와 3자리 이상 중복되는지 확인
         boolean isContain=false;
         for(int len=3;len<this.memberId.length();len++){
@@ -72,7 +72,7 @@ public class MemberRegistRequestDto {
             this.memberPwd=memberPwd;
         }
         else{
-            throw new NoRegistMemberException("비밀번호 조건에 맞지 않습니다.");
+            throw new NoMemberRegistException("비밀번호 조건에 맞지 않습니다.");
         }
     }
 
@@ -80,12 +80,12 @@ public class MemberRegistRequestDto {
         return memberName;
     }
 
-    public void setMemberName(String memberName) throws NoRegistMemberException{
+    public void setMemberName(String memberName) throws NoMemberRegistException {
        if(!(memberName==null||memberName.trim().equals(""))){
            this.memberName=memberName;
        }
        else{
-           throw new NoRegistMemberException("이름 조건에 맞지 않습니다.");
+           throw new NoMemberRegistException("이름 조건에 맞지 않습니다.");
        }
     }
 
@@ -93,7 +93,7 @@ public class MemberRegistRequestDto {
         return memberEmail;
     }
 
-    public void setMemberEmail(String memberEmail) throws NoRegistMemberException{
+    public void setMemberEmail(String memberEmail) throws NoMemberRegistException {
         //이메일 형식인지 확인
         String regex="^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
 
@@ -101,7 +101,7 @@ public class MemberRegistRequestDto {
             this.memberEmail=memberEmail;
         }
         else{
-            throw new NoRegistMemberException("이메일 조건에 맞지 않습니다.");
+            throw new NoMemberRegistException("이메일 조건에 맞지 않습니다.");
         }
     }
 
