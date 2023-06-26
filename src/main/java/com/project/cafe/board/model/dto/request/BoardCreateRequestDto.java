@@ -10,7 +10,9 @@ public class BoardCreateRequestDto {
     private String content;
 
     public BoardCreateRequestDto() {
-
+        if(writer==null||title==null||content==null) {
+            throw new InvalidBoardException("모두 입력되어야 합니다.");
+        }
     }
 
     public BoardCreateRequestDto(String writer, String title, String content) {
