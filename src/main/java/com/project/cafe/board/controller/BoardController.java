@@ -39,7 +39,7 @@ public class BoardController {
     @PostMapping("/create")
     public ResponseEntity<String> createBoard( @RequestHeader("Authorization") String authorization,
                                                  @RequestBody BoardCreateRequestDto boardCreateRequestDto ) {
-        System.out.println(boardCreateRequestDto.toString());
+        boardCreateRequestDto.validation();
         String memberToken = authorization.split(" ")[1];
         boardService.createBoard(memberToken,boardCreateRequestDto);
         return ResponseEntity.ok().body("ok");
@@ -48,6 +48,7 @@ public class BoardController {
     @PostMapping("/update")
     public ResponseEntity<String> updateBoard(@RequestHeader("Authorization") String authorization,
                                               @RequestBody BoardUpdateRequestDto boardUpdateRequestDto) {
+        boardUpdateRequestDto.validation();
         String memberToken = authorization.split(" ")[1];
         boardService.updateBoard(memberToken,boardUpdateRequestDto);
 
