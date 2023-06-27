@@ -18,7 +18,8 @@ import java.util.HashMap;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(entityManagerFactoryRef = "mysqlEntityManager", transactionManagerRef = "mysqlTransactionManager", basePackages = "com.project.cafe.member.model.member.repository")
+@EnableJpaRepositories(entityManagerFactoryRef = "mysqlEntityManager", transactionManagerRef = "mysqlTransactionManager",
+        basePackages = {"com.project.cafe.member.model.member.repository","com.project.cafe.board.model.repository"})
 public class MasterDBConfig {
 
     @Autowired
@@ -42,7 +43,8 @@ public class MasterDBConfig {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         HashMap<String, Object> properties = new HashMap<>();
         localContainerEntityManagerFactoryBean.setDataSource(mysqlDataSource());
-        localContainerEntityManagerFactoryBean.setPackagesToScan(new String[] { "com.project.cafe.member.model.member.vo" });
+        localContainerEntityManagerFactoryBean.setPackagesToScan(new String[] { "com.project.cafe.member.model.member.vo",
+        "com.project.cafe.board.model.vo"});
         localContainerEntityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
         properties.put("hibernate.hbm2ddl.auto", env.getProperty("spring.main.hibernate.hbm2ddl.auto"));
         properties.put("hibernate.dialect", env.getProperty("spring.main.hibernate.dialect"));
