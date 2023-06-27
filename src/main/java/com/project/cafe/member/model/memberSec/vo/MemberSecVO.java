@@ -1,4 +1,4 @@
-package com.project.cafe.member.model.vo;
+package com.project.cafe.member.model.memberSec.vo;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

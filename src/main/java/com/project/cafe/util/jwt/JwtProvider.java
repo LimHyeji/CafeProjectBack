@@ -1,6 +1,6 @@
 package com.project.cafe.util.jwt;
 
-import com.project.cafe.member.model.vo.MemberVO;
+import com.project.cafe.member.model.member.vo.MemberVO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.*;//build.gradle에 jsonwebtoken을 추가해주어야 함

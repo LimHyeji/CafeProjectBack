@@ -1,7 +1,6 @@
 package com.project.cafe.member.model.dto.request;
 
 import com.project.cafe.exception.list.NoMemberModifyException;
-import com.project.cafe.exception.list.NoMemberRegistException;
 
 import java.util.regex.Pattern;
 

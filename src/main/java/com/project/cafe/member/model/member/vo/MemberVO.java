@@ -1,4 +1,4 @@
-package com.project.cafe.member.model.vo;
+package com.project.cafe.member.model.member.vo;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
